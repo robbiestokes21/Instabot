@@ -1,18 +1,26 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 
 def login(browser):
     browser.get("https://www.instagram.com/?hl=en")
     time.sleep(5)
-    username = browser.find_element_by_css_selector("[name='username']")
-    password = browser.find_element_by_css_selector("[name='password']")
-    login = browser.find_element_by_css_selector("button")
+    
+    #This was used before Selenium  4.3.0
+    #username = browser.find_element_by_css_selector("[name='username']")
+    #password = browser.find_element_by_css_selector("[name='password']")
+    #login = browser.find_element_by_css_selector("button")
+    
+    #The new semtex after Selenium 4.3.0
+    username = browser.find_element(By.NAME, 'username')
+    password = browser.find_element(By.NAME, 'password')
+    login = browser.find_element(By.CSS_SELECTOR , 'button')
 
     #YOUR USERNAME GOES HERE
-    username.send_keys("my_username")
+    username.send_keys("username")
     #YOUR Password GOES HERE
-    password.send_keys("mypass291")
+    password.send_keys("password")
     login.click()
 
 
@@ -20,12 +28,12 @@ def login(browser):
     time.sleep(5)
 
 
-def Vist_Tag(browser, url):
+def Visit_Tag(browser, url):
     sleepy_time = 5
     browser.get(url)
     time.sleep(sleepy_time)
 
-    pictures = browser.find_elements_by_css_selector("div[class='_9AhH0']")
+    pictures = browser.find_elements(By.XPATH, "//div[@class='_aagu']")
 
     image_count = 0
 
@@ -36,17 +44,37 @@ def Vist_Tag(browser, url):
         picture.click()
         time.sleep(sleepy_time)
 
-        heart = browser.find_element_by_css_selector("[aria-label='Like']")
+        heart = browser.find_element(By.XPATH, "//span[@class='_aamw']")
         heart.click()
+        time.sleep(sleepy_time)
 
-        close = browser.find_element_by_css_selector("[aria-label='Close']")
+        close = browser.find_element(By.CSS_SELECTOR, "svg[aria-label='Close']")
         close.click()
+        time.sleep(sleepy_time)
 
         image_count += 1
         time.sleep(sleepy_time)
 
 def main():
-    browser = webdriver.Chrome()
+
+    # Used for Firefox
+    browser = webdriver.Firefox()
+
+    # Used for Chrome
+    #browser = webdriver.Chrome()
+
+    # Used for Edge
+    #browser = webdriver.Edge()
+
+    # Used for ChromiumEdge
+    #browser = webdriver.ChromiumEdge()
+
+    # Used for Ie
+    #browser = webdriver.Ie()
+
+    # Used for Safari
+    #browser = webdriver.Safari()
+
     login(browser)
 
     tags = [ 
@@ -61,7 +89,7 @@ def main():
 
     while True:
         for tag in tags:
-            Vist_Tag(browser, f"https://www.instagram.com/explore/tags/{tag}")
+            Visit_Tag(browser, f"https://www.instagram.com/explore/tags/{tag}")
         time.sleep(3600)
 
 main()
